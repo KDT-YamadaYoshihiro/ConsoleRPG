@@ -19,15 +19,78 @@
     <Filter Include="ヘッダー ファイル\screen">
       <UniqueIdentifier>{32d7862e-2ff7-4d13-908a-74ff00f64f63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\character">
+      <UniqueIdentifier>{0e2a13af-7f0f-464c-b241-ce9b167c718b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\character">
+      <UniqueIdentifier>{1f573536-efd8-4716-8258-49ce05b54d49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\Main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\ScreenManager.cpp">
+      <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Character.cpp">
+      <Filter>ソース ファイル\character</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\CharacterFactory.cpp">
+      <Filter>ソース ファイル\character</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Enemy.cpp">
+      <Filter>ソース ファイル\character</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Player.cpp">
+      <Filter>ソース ファイル\character</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Title.cpp">
+      <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Stage.cpp">
+      <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Battle.cpp">
+      <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Result.cpp">
+      <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Main.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ScreenManager.h">
+      <Filter>ヘッダー ファイル\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CharacterData.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CharacterFactory.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Player.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Enemy.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Title.h">
+      <Filter>ヘッダー ファイル\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle.h">
+      <Filter>ヘッダー ファイル\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Stage.h">
+      <Filter>ヘッダー ファイル\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Result.h">
+      <Filter>ヘッダー ファイル\screen</Filter>
     </ClInclude>
     <ClInclude Include="scr\ScreenBase.h">
       <Filter>ヘッダー ファイル\screen</Filter>

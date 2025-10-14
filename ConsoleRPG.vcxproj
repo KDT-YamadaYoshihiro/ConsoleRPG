@@ -127,11 +127,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Battle.cpp" />
+    <ClCompile Include="scr\Character.cpp" />
+    <ClCompile Include="scr\CharacterFactory.cpp" />
+    <ClCompile Include="scr\Enemy.cpp" />
     <ClCompile Include="scr\Main.cpp" />
+    <ClCompile Include="scr\Player.cpp" />
+    <ClCompile Include="scr\Result.cpp" />
+    <ClCompile Include="scr\ScreenManager.cpp" />
+    <ClCompile Include="scr\Stage.cpp" />
+    <ClCompile Include="scr\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Battle.h" />
+    <ClInclude Include="scr\Character.h" />
+    <ClInclude Include="scr\CharacterData.h" />
+    <ClInclude Include="scr\CharacterFactory.h" />
+    <ClInclude Include="scr\Enemy.h" />
     <ClInclude Include="scr\Main.h" />
+    <ClInclude Include="scr\Player.h" />
+    <ClInclude Include="scr\Result.h" />
     <ClInclude Include="scr\ScreenBase.h" />
+    <ClInclude Include="scr\ScreenManager.h" />
+    <ClInclude Include="scr\Stage.h" />
+    <ClInclude Include="scr\Title.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
