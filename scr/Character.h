@@ -1,7 +1,7 @@
 #pragma once
 #include "CharacterData.h"
-#include <iostream>
 
+// 行動選択の列挙型
 enum class ACTION {
 	SELECT,
 	ATTACK,
@@ -10,6 +10,7 @@ enum class ACTION {
 	NONE
 };
 
+// キャラクターの基底クラス
 class Character {
 
 protected:

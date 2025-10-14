@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "CharacterFactory.h"
 
+// エネミークラス
 class Enemy : public Character {
 public:
 	Enemy(const CharacterData& arg_data)

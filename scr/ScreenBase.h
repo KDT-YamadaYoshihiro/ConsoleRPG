@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 
+// スクリーンの基底クラス
 class ScreenBase {
 public:
 

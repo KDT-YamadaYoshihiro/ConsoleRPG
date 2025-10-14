@@ -1,9 +1,6 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-#include <memory>
 #include "ScreenBase.h"
+#include "ScreenManager.h"
 #include "Character.h"
 #include "CharacterFactory.h"
 #include "Enemy.h"

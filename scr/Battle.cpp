@@ -122,8 +122,8 @@ void Battle::PlayerAction()
 	}
 
 	// 選択されたプレイヤーの行動を実行
-	players[playerIndex - 1]->
-	
+	players[playerIndex]->ChooseAction(enemis[0]);
+
 
 }
 

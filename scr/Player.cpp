@@ -45,7 +45,7 @@ int Player::ChooseAction(std::shared_ptr<Character> arg_target)  {
 
 	case ACTION::END:
 
-		return;
+		return 0;
 
 		break;
 
