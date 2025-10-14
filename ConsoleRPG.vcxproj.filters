@@ -59,9 +59,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Main.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\ScreenManager.h">
       <Filter>ヘッダー ファイル\screen</Filter>
     </ClInclude>

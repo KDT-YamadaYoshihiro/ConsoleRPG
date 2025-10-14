@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "CharacterFactory.h"
 #include "ScreenManager.h"
 
 Battle::Battle()
@@ -8,6 +9,7 @@ Battle::Battle()
 	int stageNumber = ScreenManager::GetInstance().GetStageNumber();
 	// ステージ番号に応じたエネミーを生成
 	GenerateEnemy(stageNumber);
+
 }
 
 void Battle::Update()
@@ -42,9 +44,6 @@ void Battle::Update()
 	// 
 }
 
-void Battle::Draw() const
-{
-}
 
 void Battle::GenerateEnemy(int arg_stageNumber)
 {
@@ -85,7 +84,7 @@ bool Battle::CheckVictory()
 	// 決着した場合はisBattleOverにセット（勝利:true、敗北:false）
 
 	// プレイヤーの生存判定を行う
-	for (const auto& player : players) {
+	for (const auto& player : ScreenManager::GetInstance().GetPlayers()) {
 		if (player->GetHP() <= 0) {
 			isBattleOver = false;
 			return true;
@@ -122,6 +121,7 @@ void Battle::PlayerAction()
 	}
 
 	// 選択されたプレイヤーの行動を実行
+	auto players = ScreenManager::GetInstance().GetPlayers();
 	players[playerIndex]->ChooseAction(enemis[0]);
 
 

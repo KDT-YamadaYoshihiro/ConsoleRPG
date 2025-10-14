@@ -1,7 +1,6 @@
 #pragma once
 #include "CharacterData.h"
 #include "Character.h"
-#include <memory>
 
 class CharacterFactory {
 

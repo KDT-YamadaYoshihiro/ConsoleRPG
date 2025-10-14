@@ -17,10 +17,15 @@ class ScreenManager {
 
 
 	std::shared_ptr<ScreenBase> currentScreen = nullptr;
+
 	// コンストラクタ
 	//　初期化
 	ScreenManager() {
-		currentScreen = std::make_shared<Title>();
+
+		// 最初のスクリーンはタイトル
+		if (currentScreen == nullptr) {
+			currentScreen = std::make_shared<Title>();
+		}
 		for (int i = 0; i < 4; i++){
 			players.push_back(CharacterFactory::GetInstance().CreateCracter(i));
 		}
@@ -43,8 +48,7 @@ public:
 
 	// 更新処理
 	void Update();
-	// 描画
-	void Draw();
+
 	// スクリーン変更
 	template<typename T>
 	void ChangeScreen(std::shared_ptr<T> newScreen);
@@ -58,3 +62,9 @@ public:
 
 };
 
+template<typename T>
+inline void ScreenManager::ChangeScreen(std::shared_ptr<T> newScreen)
+{
+	// スクリーンを変更
+	currentScreen = newScreen;
+}

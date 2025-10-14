@@ -14,7 +14,5 @@ class Stage : public ScreenBase {
 public:
 	// XVˆ—
 	void Update() override;
-	// •`‰æˆ—
-	void Draw() const override;
 };
 

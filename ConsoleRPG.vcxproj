@@ -144,7 +144,6 @@
     <ClInclude Include="scr\CharacterData.h" />
     <ClInclude Include="scr\CharacterFactory.h" />
     <ClInclude Include="scr\Enemy.h" />
-    <ClInclude Include="scr\Main.h" />
     <ClInclude Include="scr\Player.h" />
     <ClInclude Include="scr\Result.h" />
     <ClInclude Include="scr\ScreenBase.h" />

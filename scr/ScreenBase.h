@@ -15,6 +15,4 @@ public:
 
 	// XVˆ—
 	virtual void Update() = 0;
-	// •`‰æˆ—
-	virtual void Draw() const = 0;
 };
