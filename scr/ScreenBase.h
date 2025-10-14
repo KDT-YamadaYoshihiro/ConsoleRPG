@@ -1,31 +1,16 @@
 #pragma once
 #include <iostream>
-#include <vector>
 
-enum class SCREEN {
-	TITLE,
-	STAGE,
-	BATTLE,
-	RESULT,
-};
-
-class Screen {
-
-	SCREEN screen;
-
+class ScreenBase {
 public:
 
 	// コンストラクタ
-	//　初期化
-	Screen()
-		:screen(SCREEN::TITLE) 
-	{
-	};
+	ScreenBase() = default;
+	// デストラクタ
+	virtual ~ScreenBase() = default;
 
 	// 更新処理
-	void Update();
-	// 描画
-	void Draw();
-	
-
+	virtual void Update() = 0;
+	// 描画処理
+	virtual void Draw() const = 0;
 };
