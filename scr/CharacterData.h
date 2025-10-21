@@ -9,6 +9,7 @@ struct CharacterData
 {
 	std::string name;
 	int ID;
+	int Lv;
 	int maxHP;
 	int HP;
 	int attack;
@@ -29,7 +30,6 @@ enum CHARA_NAME{
 	SLIME,
 	GOBLIN,
 	WOLF,
-	DRAGON,
 
 	// キャラクターMax値
 	CHARA_MAX

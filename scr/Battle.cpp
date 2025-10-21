@@ -1,133 +1,247 @@
 #include "Battle.h"
-#include "CharacterFactory.h"
 #include "ScreenManager.h"
+#include "Result.h"
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 
-Battle::Battle()
+// コンストラクタ（引数なし）
+BattleScreen::BattleScreen()
+    : enemyPool(10)  // ObjectPool を初期化
 {
-	// 初期化
-	// ステージ番号を取得
-	int stageNumber = ScreenManager::GetInstance().GetStageNumber();
-	// ステージ番号に応じたエネミーを生成
-	GenerateEnemy(stageNumber);
+    state = State::Idle;
+    baseEnemies = 2;   // 初期敵数
+    currentFade = 1;
+    BattleStart();
+}
+
+// プレイヤーセット
+void BattleScreen::SetPlayer(std::vector<std::shared_ptr<Character>> p) {
+    player = p;
+}
+
+// バトル開始（敵生成・プレイヤー回復）
+void BattleScreen::BattleStart() {
+
+    player = ScreenManager::GetInstance().GetPlayers();
+    for (auto& p : player) {
+        if (!p) {
+            std::cerr << "[Error] プレイヤーが存在しません!\n";
+            state = State::Result;
+            return;
+        }
+    }
+    for (auto& p : player) {
+        p->Heal();  // HP回復
+    }
+
+    // リストをリセット
+    enemies.clear();
+
+    int enemyCount = 2 + (currentFade - 1); 
+    for (int i = 0; i < enemyCount; ++i) {
+        int id = SLIME;
+        auto enemy = ScreenManager::GetInstance().AcquireEnemy(id);
+        if (enemy) {
+            enemies.push_back(enemy);
+        }
+    }
+
+    if (enemies.empty()) {
+        std::cerr << "[Error] 敵が発生しません!\n";
+        state = State::Result;
+        return;
+    }
+
+    state = State::Idle;
+    std::cout << "--- Battle Fade " << currentFade << " Start ---\n";
+}
+
+// Update（スイッチ文によるステート管理）
+void BattleScreen::Update() {
+
+
+
+    switch (state) {
+    case State::Idle:
+        for (auto& p : player) {
+            std::cout << "\n--- バトル開始 ---\n";
+            std::cout << "プレイヤー: " << p->GetName()
+                << " HP:" << p->GetHP() << "/" << p->GetMaxHP() << "\n";
+            std::cout << "敵の数: " << enemies.size() << "\n";
+            for (auto& e : enemies) {
+                std::cout << "エネミーHP：" << e->GetHP() << std::endl;
+            }
+            state = State::PlayerTurn;
+        }
+        break;
+
+    case State::PlayerTurn:
+        std::cout << "\n--- プレイヤーのターン ---\n";
+        PlayerTurn();
+
+        for (auto& e : enemies) {
+
+            if (e->IsAlive()) {
+                DeadEnemies++;
+            }
+        }
+
+        if (DeadEnemies == enemies.size()) {
+            state = State::CheckResult;
+        }
+        else {
+            state = State::EnemyTurn;
+        }
+
+
+        break;
+
+    case State::EnemyTurn:
+        std::cout << "\n--- エネミーのターン ---\n";
+        
+        EnemyTurn();
+
+        for (auto& p : player) {
+            if (p->IsAlive()) {
+                state = State::CheckResult;
+            }
+            else {
+                state = State::PlayerTurn;
+            }
+        }
+        break;
+
+    case State::CheckResult:
+
+        for(auto& p : player){
+            if (p->IsAlive()) {
+                std::cout << "プレイヤーが敗北しました！戦闘終了\n";
+                ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
+                state = State::Idle;
+            }
+            return;
+        }
+
+        for (auto& e : enemies) {
+
+            if (e->IsAlive()) {
+                DeadEnemies++;
+            }
+        }
+
+        if (DeadEnemies == enemies.size()) {
+            std::cout << "全ての敵を倒しました！\n";
+            state = State::FadeTransition;
+        }
+
+
+        break;
+
+    case State::FadeTransition: {
+        std::cout << "次のフェードに進みますか?\n1: はい  2: いいえ\n";
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 1) {
+            currentFade++;
+            BattleStart(); // 敵再生成・HP回復
+            state = State::Idle;
+        }
+        else if (choice == 2) {
+            std::cout << "バトル終了\n";
+            ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
+            state = State::Idle;
+        }
+        else {
+            std::cout << "無効な入力です。再度選択してください。\n";
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+// プレイヤー行動
+void BattleScreen::PlayerTurn() {
+
+    std::cout << "行動を選択して下しださい\n攻撃：１　回復：２" << std::endl;
+    int action;
+    std::cin >> action;
+
+    if (action == 1) {
+
+        std::cout << "攻撃が選択されました。" << std::endl;
+        for (auto& enemy : enemies) {
+
+            for (auto& p : player) {
+                if (enemy->IsAlive()) {
+                    int dmg = std::max(1, p->GetAttack() - enemy->GetDefense());
+                    enemy->TakeDamage(dmg);
+
+                    std::cout << p->GetName().c_str() << " は " << enemy->GetName().c_str()
+                        << " に " << dmg << " のダメージを与えた\n";
+
+                    if (!enemy->IsAlive()) {
+                        p->LvUp();
+                        std::cout << enemy->GetName().c_str() << " を倒した！ プレイヤーLV:"
+                            << p->GetData().Lv << "\n";
+                        enemyPool.Release(enemy);
+                    }
+                    break; // 1ターンにつき1体攻撃
+                }
+            }
+        }
+
+    }
+    else if (action == 2) {
+
+        std::cout << "回復が選択されました" << std::endl;
+        for (auto& p : player) {
+            if (p->IsAlive()) {
+                
+                p->Heal();
+                int heal = p->GetMaxHP() * 0.6;
+
+                std::cout << p->GetName().c_str() << "は" << heal << "回復した！\n" << "HP:" << p->GetHP();
+            }
+            break;
+        }
+    }
+    else {
+        std::cout << "無効な数値が入力されました。もう一度入力してください" << std::endl;
+        std::cin >> action;
+    }
+
 
 }
 
-void Battle::Update()
-{
-	// 戦闘処理
-	switch (battleMode)
-	{
-	case BATTLE_MODE::PLAYER_TURN:
+// エネミー行動
+void BattleScreen::EnemyTurn() {
+    for (auto& enemy : enemies) {
+        for (auto& p : player) {
+            if (enemy->IsAlive()) {
+                int dmg = std::max(1, enemy->GetAttack() - p->GetDefense());
+                p->TakeDamage(dmg);
 
-		PlayerAction();
-
-		battleMode = BATTLE_MODE::ENEMY_TURN;
-
-		break;
-	case BATTLE_MODE::ENEMY_TURN:
-
-		EnemyAction();
-
-		battleMode = BATTLE_MODE::PLAYER_TURN;
-
-		break;
-	case BATTLE_MODE::BATTLE_OVER:
-
-		// 戦闘終了処理
-		CheckVictory();
-
-		break;
-
-	default:
-		break;
-	}
-	// 
+                std::cout << enemy->GetName() << " は " << p->GetName()
+                    << " に " << dmg << " のダメージを与えた\n";
+            }
+        }
+    }
 }
 
-
-void Battle::GenerateEnemy(int arg_stageNumber)
-{
-	std::shared_ptr<Character> enemy;
-	// ステージ番号に応じたエネミーを生成
-	switch (arg_stageNumber)
-	{
-	case 1:
-
-		enemy = CharacterFactory::GetInstance().CreateCracter(SLIME);
-		enemis.push_back(enemy);
-
-		break;
-	case 2:
-		enemy = CharacterFactory::GetInstance().CreateCracter(GOBLIN);
-		enemis.push_back(enemy);
-		break;
-
-	case 3:
-		enemy = CharacterFactory::GetInstance().CreateCracter(WOLF);
-		enemis.push_back(enemy);
-		break;
-
-
-	default:
-		// デフォルトのエネミーを生成
-		enemy = CharacterFactory::GetInstance().CreateCracter(SLIME);
-		enemis.push_back(enemy);
-
-		break;
-	}
+// 全敵死亡判定
+bool BattleScreen::AllEnemiesDead() const {
+    return std::all_of(enemies.begin(), enemies.end(), [](const std::shared_ptr<Character>& e) {
+        return !e->IsAlive();
+        });
 }
 
-bool Battle::CheckVictory()
-{
-	// バトルの勝敗、続行を判定
-	// return 決着 : 続行 ? true ：false
-	// 決着した場合はisBattleOverにセット（勝利:true、敗北:false）
-
-	// プレイヤーの生存判定を行う
-	for (const auto& player : ScreenManager::GetInstance().GetPlayers()) {
-		if (player->GetHP() <= 0) {
-			isBattleOver = false;
-			return true;
-		}
-	}
-
-	// エネミーの生存判定を行う
-	for (const auto& enemy : enemis) {
-		if (enemy->GetHP() <= 0) {
-			isBattleOver = true;
-			return true;
-		}
-	}
-
-
-	return false;
-}
-
-void Battle::PlayerAction()
-{
-
-	// プレイヤーの行動選択
-	// 行動するプレイヤーを選択
-	std::cout << "行動するプレイヤーを選択してください\n";
-	std::cout << "1~4の中から入力してください\n";
-
-	int playerIndex = -1;
-	std::cin >> playerIndex;
-
-	// 入力の妥当性を確認
-	while (playerIndex < 1 || playerIndex > 4) {
-		std::cout << "無効な選択です。もう一度入力してください。\n";
-		std::cin >> playerIndex;
-	}
-
-	// 選択されたプレイヤーの行動を実行
-	auto players = ScreenManager::GetInstance().GetPlayers();
-	players[playerIndex]->ChooseAction(enemis[0]);
-
-
-}
-
-void Battle::EnemyAction()
-{
-	// エネミーの行動
+// フェード数に応じた敵選択
+int BattleScreen::ChooseEnemyID() const {
+    int ids[] = { SLIME, GOBLIN, WOLF };
+    return ids[rand() % 4];
 }

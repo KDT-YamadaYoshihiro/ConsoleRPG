@@ -13,7 +13,7 @@ public:
 
 	// 行動選択
 	// 疑似的AIで行動する(0-攻撃, 1-回復, 2-)
-	int ChooseAction(std::shared_ptr<Character> arg_target) override;
+	int ChoiceAction(std::shared_ptr<Character> arg_target) override;
 		
 
 };

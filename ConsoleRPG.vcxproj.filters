@@ -48,9 +48,6 @@
     <ClCompile Include="scr\Title.cpp">
       <Filter>ソース ファイル\screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Stage.cpp">
-      <Filter>ソース ファイル\screen</Filter>
-    </ClCompile>
     <ClCompile Include="scr\Battle.cpp">
       <Filter>ソース ファイル\screen</Filter>
     </ClCompile>
@@ -83,14 +80,17 @@
     <ClInclude Include="scr\Battle.h">
       <Filter>ヘッダー ファイル\screen</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Stage.h">
-      <Filter>ヘッダー ファイル\screen</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Result.h">
       <Filter>ヘッダー ファイル\screen</Filter>
     </ClInclude>
     <ClInclude Include="scr\ScreenBase.h">
       <Filter>ヘッダー ファイル\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ObjectPool.h">
+      <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\PoolManager.h">
+      <Filter>ヘッダー ファイル\character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,46 +1,45 @@
 #pragma once
+#include <vector>
+#include <memory>
 #include "ScreenBase.h"
+#include "CharacterFactory.h"
 #include "Character.h"
-#include "Enemy.h"
+#include "ObjectPool.h"
 
-// バトル進行
-enum class BATTLE_MODE {
-	PLAYER_TURN,
-	ENEMY_TURN,
-	BATTLE_OVER
-};
+class BattleScreen : public ScreenBase {
+public:
+    // バトル進行ステート
+    enum class State {
+        Idle,           // バトル開始前、案内表示用
+        PlayerTurn,     // プレイヤー行動フェーズ
+        EnemyTurn,      // エネミー行動フェーズ
+        CheckResult,    // 勝敗判定フェーズ
+        FadeTransition, // フェード進行確認フェーズ
+        Result          // バトル終了・リザルトへ
+    };
 
-class Battle : public ScreenBase {
+private:
+    std::vector<std::shared_ptr<Character>> player;
+    std::vector<std::shared_ptr<Character>> enemies;
+    ObjectPool<Character> enemyPool;
 
-	// 戦闘に関するメンバ変数
-	BATTLE_MODE battleMode;
-	bool isBattleOver;
+    int currentFade = 1;
+    int baseEnemies = 1;  // 初期敵数
+    State state = State::Idle;
 
-	// エネミーの生成（複数生成に対応）
-	std::vector<std::shared_ptr<Character>> enemis;
+    int DeadEnemies;
 
 public:
+    BattleScreen();
 
-	// コンストラクタ
-	Battle();
+    void SetPlayer(std::vector<std::shared_ptr<Character>> p);
 
-	// 更新処理
-	void Update() override;
+    void BattleStart();
+    void Update() override;
 
-
-	// エネミーを生成する
-	void GenerateEnemy(int arg_stageNumber);
-
-	// 勝敗判定
-	bool CheckVictory();
-
-	// プレイヤーの行動選択
-	void PlayerAction();
-
-	// 敵の行動
-	void EnemyAction();
-
-
-
-
+private:
+    void PlayerTurn();
+    void EnemyTurn();
+    bool AllEnemiesDead() const;
+    int ChooseEnemyID() const;
 };

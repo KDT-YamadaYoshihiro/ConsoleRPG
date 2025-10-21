@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-int Player::ChooseAction(std::shared_ptr<Character> arg_target)  {
+int Player::ChoiceAction(std::shared_ptr<Character> arg_target)  {
 
 	int act = -1;
 	// 行動選択のメニューを表示
@@ -37,7 +37,7 @@ int Player::ChooseAction(std::shared_ptr<Character> arg_target)  {
 		break;
 	case ACTION::HEAL:
 
-		this->Heal(20); // 固定値で回復
+		this->Heal(); // 固定値で回復
 
 		action = ACTION::END;
 

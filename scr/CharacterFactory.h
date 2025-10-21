@@ -22,9 +22,9 @@ public:
 		return instance;
 	}
 
+	// 指定IDのキャラクターデータを取得
+	const CharacterData* GetCharacterData(int id) const;
+
 	// 指定したIDのキャラクターデータを生成して返す
 	std::shared_ptr<Character> CreateCracter(int arg_id);
-
-	
-
 };

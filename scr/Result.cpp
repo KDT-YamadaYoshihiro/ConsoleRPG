@@ -1,11 +1,59 @@
 #include "Result.h"
+#include "ScreenManager.h"
+#include <iostream>
 
-void Result::Update()
+ResultScreen::ResultScreen()
 {
-
-	// 勝敗表示
-
-	// 続行か終了を確認１：続行→stageに、２終了→return
-
 }
 
+void ResultScreen::SetPlayer(std::vector<std::shared_ptr<Character>> p) {
+    player = p;
+}
+
+void ResultScreen::SetLastFade(int fade) {
+    lastFade = fade;
+}
+
+void ResultScreen::Update() {
+
+    std::cout << "ResultScreen" << std::endl;
+
+    if (!displayed) {
+        player = ScreenManager::GetInstance().GetPlayers();
+
+        for (auto& p : player) {
+            if (!p) {
+                std::cerr << "[Error] リザルトスクリーンにてプレイヤーが見つかりませんでした\n";
+                return;
+            }
+
+            std::cout << "\n=== Result Screen ===\n";
+            std::cout << "Last Fade: " << lastFade << "\n";
+            std::cout << "Player: " << p->GetName() << "\n";
+            std::cout << "LV: " << p->GetData().Lv
+                << " HP: " << p->GetHP() << "/" << p->GetMaxHP()
+                << " ATK: " << p->GetAttack()
+                << " DEF: " << p->GetDefense() << "\n";
+
+            std::cout << "\n1: Retry  2: Exit\n";
+            displayed = true;
+        }
+    }
+
+    int choice = 0;
+    std::cin >> choice;
+
+    if (choice == 1) {
+        // 再挑戦の場合、プレイヤーのステータスを初期化
+        if (ScreenManager::GetInstance) {
+            ScreenManager::GetInstance().ResetPlayerStatus();
+        }
+        std::cout << "Restarting battle...\n";
+        // 画面を遷移
+        ScreenManager::GetInstance().ChangeScreen<BattleScreen>();
+    }
+    else if (choice == 2) {
+        std::cout << "Exiting game...\n";
+        return;
+    }
+}

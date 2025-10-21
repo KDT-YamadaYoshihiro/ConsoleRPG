@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <iostream>
 
-int Enemy::ChooseAction(std::shared_ptr<Character> arg_target)
+int Enemy::ChoiceAction(std::shared_ptr<Character> arg_target)
 {
 	// ŠÈ’P‚È‹^Ž—AI‚Ì—á
 	if (data.HP < data.maxHP / 4) {

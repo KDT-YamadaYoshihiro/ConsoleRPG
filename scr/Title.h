@@ -1,7 +1,7 @@
 #pragma once
 #include "ScreenBase.h"
 
-class Title : public ScreenBase {
+class TitleScreen : public ScreenBase {
 
 public:
 

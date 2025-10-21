@@ -12,6 +12,6 @@ public:
 	}
 
 	// ‘I‘ğ®‚Ìs“®
-	int ChooseAction(std::shared_ptr<Character> arg_target) override;
+	int ChoiceAction(std::shared_ptr<Character> arg_target) override;
 
 };
