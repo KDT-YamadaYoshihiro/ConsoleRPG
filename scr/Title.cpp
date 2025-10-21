@@ -5,6 +5,8 @@
 void TitleScreen::Update()
 {
 	// エンターキーの入力を待つ
+	std::cout << "\n=== Title Screen ===\n";
+
 	std::cout << "Press Enter to Start" << std::endl;
 
 

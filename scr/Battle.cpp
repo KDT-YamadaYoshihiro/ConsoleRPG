@@ -53,7 +53,9 @@ void BattleScreen::Update() {
 
     case State::Idle:
 
-        std::cout << "---【バトル開始】---" << std::endl;
+        std::cout << "\n=== Battle Screen ===\n";
+
+        std::cout << "---【ステータス】---" << std::endl;
 
         for (auto& p : ScreenManager::GetInstance().GetPlayers()) {
             std::cout << "プレイヤー\n" << "name:" << p->GetName() << "\nLv:" << p->GetLv() << " HP:" << p->GetHP() << std::endl;
@@ -61,6 +63,8 @@ void BattleScreen::Update() {
         for (auto& e : ScreenManager::GetInstance().GetActiveEnemies()) {
             std::cout << "エネミー\n" << "name:" << e->GetName() << "\nLv:" << e->GetLv() << " HP:" << e->GetHP() << std::endl;
         }
+
+        std::cout << "\n---【バトル開始】---" << std::endl;
 
         state = State::PlayerTurn;
 
@@ -214,13 +218,10 @@ void BattleScreen::FadeTransition() {
             system("cls");
             ScreenManager::GetInstance().SetFadeNum(currentFade);
             ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
-            std::cout << "バトル終了。\n";
-
         }
     }
     else if (judg == Judg::Defeat) {
         system("cls");
-        std::cout << "バトル終了。\n";
         ScreenManager::GetInstance().SetFadeNum(currentFade);
         ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
     }
