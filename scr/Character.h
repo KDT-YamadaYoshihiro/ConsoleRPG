@@ -24,7 +24,7 @@ protected:
 public:
 
 	// デフォルトコンストラクタを明示的に定義
-	Character() : data({ "", 0, 0, 0, 0, 0, 0 }) {}
+	Character() = default;
 	// コンストラクタ
 	// 初期化
 	Character(const CharacterData& arg_data)
@@ -64,7 +64,7 @@ public:
 	// 回復する
 	void Heal() {
 		data.HP += data.maxHP * 0.6;
-		if (data.HP > data.maxHP) {
+		if (data.HP >= data.maxHP) {
 			data.HP = data.maxHP;
 		}
 	}
@@ -73,23 +73,22 @@ public:
 		data.HP = data.maxHP;
 	}
 
-	// 生存確認
 	bool IsAlive() const {
-		
-		if (data.HP < 1) {
-			return true;
+		// HPが0以下なら死亡
+		if (data.HP <= 0) {
+			return false;
 		}
 		else {
-			return false;
+			return true;
 		}
 	}
 
 	void LvUp() {
 		data.Lv++;
-		data.maxHP *= 1.1;
-		data.attack *= 1.1;
-		data.defense *= 1.1;
-		data.speed *= 1.1;
+		data.maxHP *= 1.05;
+		data.attack *= 1.05;
+		data.defense *= 1.05;
+		data.speed *= 1.05;
 	}
 
 };

@@ -7,7 +7,7 @@ const CharacterData CharacterFactory::CharacterTable[] = {
 	{"Alia", ALIA, 1, 90, 90, 15, 15, 10},
 	{"Pino", PINO, 1, 70, 70, 30, 3, 25},
 	// エネミー
-	{"Slime", SLIME, 1, 50, 50, 10, 5, 5},
+	{"Slime", SLIME, 1, 50, 50, 20, 5, 5},
 	{"Goblin", GOBLIN, 1, 60, 60, 15, 10, 10},
 	{"Wolf", WOLF, 1, 80, 80, 20, 8, 15},
 };
