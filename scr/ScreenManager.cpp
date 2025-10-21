@@ -3,13 +3,13 @@
 #include "CharacterFactory.h"
 
 ScreenManager::ScreenManager()
+    :slimePool(20)
 {
 	// 最初のスクリーンはタイトル
 	if (currentScreen == nullptr) {
 		currentScreen = std::make_shared<TitleScreen>();
 	}
     InitPlayers();
-    InitEnemyPool();
 }
 
 void ScreenManager::Update()
