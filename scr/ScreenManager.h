@@ -6,8 +6,9 @@
 #include "Battle.h"
 
 #include "Character.h"
+#include "Enemy.h"
 #include "CharacterFactory.h"
-#include "PoolManager.h"
+#include "ObjectPool.h"
 
 class ScreenManager {
 
@@ -15,10 +16,15 @@ class ScreenManager {
 	int stageNumber = 0;
 
 	std::vector<std::shared_ptr<Character>> players;
-	std::vector<int> enemyIDs;
+	// スライム用プール
+	ObjectPool<Enemy> slimePool;
+	// 現在バトル中のエネミー
+	std::vector<std::shared_ptr<Enemy>> activeEnemies;
 
 	std::shared_ptr<ScreenBase> currentScreen = nullptr;
 
+	// 最終フェード数（リザルトで使用）
+	int fadeNum = 0;
 
 	// コンストラクタ
 	//　初期化
@@ -43,20 +49,13 @@ public:
 	// プレイヤーを生成してプールに登録
 	void InitPlayers() {
 		auto akira = CharacterFactory::GetInstance().CreateCracter(AKIRA);
-		if (!akira) throw std::runtime_error("アキラの生成に失敗しました");
+		if (!akira) {
+			std::cout << "アキラの生成に失敗しました" << std::endl;
+		}
 		players.push_back(akira);
 	}
 
-	// 敵キャラプールの初期化
-	void InitEnemyPool() {
-		enemyIDs = { SLIME, GOBLIN, WOLF }; // 敵IDのリスト
-		for (int id : enemyIDs) {
-			auto ch = CharacterFactory::GetInstance().CreateCracter(SLIME);
-			CharacterPoolManager::GetInstance().Release(SLIME, ch);
-			
-		}
-	}
-
+	// プレイヤー取得
 	const std::vector<std::shared_ptr<Character>>& GetPlayers() const {
 		return players;
 	}
@@ -73,14 +72,35 @@ public:
 		}
 	}
 
-	std::shared_ptr<Character> AcquireEnemy(int id) {
-		return CharacterPoolManager::GetInstance().Acquire(id);
+	void SpawnSlimes(int count) {
+		activeEnemies.clear();
+
+		for (int i = 0; i < count; ++i) {
+			// プールからスライム取得
+			auto handle = slimePool.Acquire();
+			auto slime = handle.Detach();
+
+			// スライムのデータ初期化
+			const auto* data = CharacterFactory::GetInstance().GetCharacterData(SLIME);
+			if (data) {
+				*slime = Enemy(*data);
+			}
+
+			activeEnemies.push_back(slime);
+		}
 	}
 
-	void ReleaseEnemy(int id, std::shared_ptr<Character> enemy) {
-		CharacterPoolManager::GetInstance().Release(id, enemy);
+	const std::vector<std::shared_ptr<Enemy>>& GetActiveEnemies() const {
+		return activeEnemies;
 	}
 
+	void EndBattle() {
+		// バトル終了時、全エネミーをプールに返却
+		for (auto& e : activeEnemies) {
+			slimePool.Release(e);
+		}
+		activeEnemies.clear();
+	}
 
 	// 更新処理
 	void Update();
@@ -92,6 +112,10 @@ public:
 	// ステージ番号取得とセット
 	int GetStageNumber() const { return stageNumber; }
 	void SetStageNumber(int number) { stageNumber = number; }
+
+	// フェード数のセットと取得
+	int GetFadeNum() const { return fadeNum; }
+	void SetFadeNum(int arg_fadeNum) { fadeNum = arg_fadeNum; }
 
 };
 
