@@ -16,7 +16,7 @@ void ResultScreen::SetLastFade(int fade) {
 
 void ResultScreen::Update() {
 
-    std::cout << "ResultScreen" << std::endl;
+    SetLastFade(ScreenManager::GetInstance().GetFadeNum());
 
     if (!displayed) {
         player = ScreenManager::GetInstance().GetPlayers();
@@ -50,9 +50,11 @@ void ResultScreen::Update() {
         }
         std::cout << "Restarting battle...\n";
         // ‰æ–Ê‚ð‘JˆÚ
+        system("cls");
         ScreenManager::GetInstance().ChangeScreen<BattleScreen>();
     }
     else if (choice == 2) {
+        system("cls");
         std::cout << "Exiting game...\n";
         return;
     }
