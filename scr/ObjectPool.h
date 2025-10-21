@@ -1,41 +1,39 @@
 #pragma once
 #include <vector>
-#include <memory>
 #include <stack>
-
-
+#include <memory>
+#include <algorithm>
+#include "PoolHandle.h"
 
 template<typename T>
 class ObjectPool {
-private:
-    std::vector<std::shared_ptr<T>> objects;
-    std::stack<std::shared_ptr<T>> freeStack;
+    std::vector<std::shared_ptr<T>> objects_;
+    std::stack<std::shared_ptr<T>> free_;
 
 public:
-    ObjectPool(size_t initCount = 10) {
-        for (size_t i = 0; i < initCount; ++i) {
+    ObjectPool(size_t initialCount = 10) {
+        for (size_t i = 0; i < initialCount; i++) {
             auto obj = std::make_shared<T>();
-            objects.push_back(obj);
-            freeStack.push(obj);
+            objects_.push_back(obj);
+            free_.push(obj);
         }
     }
 
-    // オブジェクト取得
-    std::shared_ptr<T> Acquire() {
-        if (freeStack.empty()) {
-            auto obj = std::make_shared<T>();
-            objects.push_back(obj);
-            return obj;
+    PoolHandle<T> Acquire() {
+        if (free_.empty()) {
+            size_t addCount = std::max<size_t>(1, objects_.size());
+            for (size_t i = 0; i < addCount; i++) {
+                auto obj = std::make_shared<T>();
+                objects_.push_back(obj);
+                free_.push(obj);
+            }
         }
-        auto obj = freeStack.top();
-        freeStack.pop();
-        return obj;
+        auto obj = free_.top();
+        free_.pop();
+        return PoolHandle<T>(obj, this);
     }
 
-    // オブジェクト返却
     void Release(std::shared_ptr<T> obj) {
-        freeStack.push(obj);
+        free_.push(obj);
     }
-
-    size_t Count() const { return objects.size(); }
 };
