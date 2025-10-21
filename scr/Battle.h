@@ -12,21 +12,29 @@ public:
     enum class State {
         Idle,           // バトル開始前、案内表示用
         PlayerTurn,     // プレイヤー行動フェーズ
+        PTrurnEnd,      // プレイヤー終了フェーズ
         EnemyTurn,      // エネミー行動フェーズ
+        ETurnEnd,       // エネミーの終了フェーズ
         CheckResult,    // 勝敗判定フェーズ
         FadeTransition, // フェード進行確認フェーズ
         Result          // バトル終了・リザルトへ
     };
 
+    enum class Judg
+    {
+        None,
+        Victory,
+        Defeat,
+    };
+
 private:
     std::vector<std::shared_ptr<Character>> player;
-    std::vector<std::shared_ptr<Character>> enemies;
-    ObjectPool<Character> enemyPool;
 
+    int enemyCount = 1;
     int currentFade = 1;
     int baseEnemies = 1;  // 初期敵数
     State state = State::Idle;
-
+    Judg judg = Judg::None;
     int DeadEnemies;
 
 public:
@@ -40,6 +48,6 @@ public:
 private:
     void PlayerTurn();
     void EnemyTurn();
-    bool AllEnemiesDead() const;
-    int ChooseEnemyID() const;
+    void FadeTransition();
+    bool Victoryjudg();
 };
