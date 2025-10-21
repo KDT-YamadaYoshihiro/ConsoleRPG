@@ -145,7 +145,7 @@
     <ClInclude Include="scr\Enemy.h" />
     <ClInclude Include="scr\ObjectPool.h" />
     <ClInclude Include="scr\Player.h" />
-    <ClInclude Include="scr\PoolManager.h" />
+    <ClInclude Include="scr\PoolHandle.h" />
     <ClInclude Include="scr\Result.h" />
     <ClInclude Include="scr\ScreenBase.h" />
     <ClInclude Include="scr\ScreenManager.h" />

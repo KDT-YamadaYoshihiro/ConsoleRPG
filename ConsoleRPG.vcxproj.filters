@@ -89,7 +89,7 @@
     <ClInclude Include="scr\ObjectPool.h">
       <Filter>ヘッダー ファイル\character</Filter>
     </ClInclude>
-    <ClInclude Include="scr\PoolManager.h">
+    <ClInclude Include="scr\PoolHandle.h">
       <Filter>ヘッダー ファイル\character</Filter>
     </ClInclude>
   </ItemGroup>
