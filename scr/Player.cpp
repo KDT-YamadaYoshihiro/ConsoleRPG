@@ -9,23 +9,23 @@ int Player::ChoiceAction(std::shared_ptr<Character> arg_target)  {
 	{
 	case ACTION::SELECT:
 
-		// 攻撃か回復か選択
-		std::cout << "行動を選択してください\n";
-		std::cout << "0: 攻撃\n"<< "1: 回復";
-		std::cin >> act;
+		//// 攻撃か回復か選択
+		//std::cout << "行動を選択してください\n";
+		//std::cout << "0: 攻撃\n"<< "1: 回復";
+		//std::cin >> act;
 
-		// 入力の妥当性を確認
-		while (act < 0 || act > 1) {
-			std::cout << "無効な選択です。もう一度入力してください。\n";
-			std::cin >> act;
-		}
+		//// 入力の妥当性を確認
+		//while (act < 0 || act > 1) {
+		//	std::cout << "無効な選択です。もう一度入力してください。\n";
+		//	std::cin >> act;
+		//}
 
-		if (act == 0) {
-			action = ACTION::ATTACK;
-		}
-		else if (act == 1) {
-			action = ACTION::HEAL;
-		}
+		//if (act == 0) {
+		//	action = ACTION::ATTACK;
+		//}
+		//else if (act == 1) {
+		//	action = ACTION::HEAL;
+		//}
 
 		break;
 	case ACTION::ATTACK:

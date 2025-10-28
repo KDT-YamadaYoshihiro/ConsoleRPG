@@ -25,13 +25,13 @@ public:
 	// プレイヤーのステータス表示
 	void PlayerState(std::string arg_name, int arg_lv, int arg_hp, int arg_atk,int arg_def)
 	{
-		std::cout << "プレイヤー\n" << "name:" << arg_name << "\nLv:" << arg_lv << " HP:" << arg_hp << "ATK:" << arg_atk << "DEF:" << arg_def << std::endl;
+		std::cout << "プレイヤー\n" << "name:" << arg_name << "\nLv:" << arg_lv << "\nHP:" << arg_hp << "\nATK:" << arg_atk << "\nDEF:" << arg_def << "\n" << std::endl;
 	};
 
 	// エネミーのステータスを表示
-	void EnemyState(std::string arg_name, int arg_lv, int arg_hp, int arg_def)
+	void EnemyState(std::string arg_name, int arg_lv, int arg_hp, int arg_atk, int arg_def)
 	{
-		std::cout << "エネミー\n" << "name:" << arg_name << "\nLv:" << arg_lv << " HP:" << arg_hp << "DEF:" << arg_def << std::endl;
+		std::cout << "エネミー\n" << "name:" << arg_name << "\nLv:" << arg_lv << "\nHP:" << arg_hp << "\nATK:" << arg_atk << "\nDEF:" << arg_def << "\n" << std::endl;
 
 	};
 
