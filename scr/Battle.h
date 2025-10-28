@@ -5,6 +5,8 @@
 #include "CharacterFactory.h"
 #include "Character.h"
 #include "ObjectPool.h"
+#include "view.h"
+
 
 class BattleScreen : public ScreenBase {
 public:
@@ -29,9 +31,9 @@ public:
 
 private:
     std::vector<std::shared_ptr<Character>> player;
-
+    std::shared_ptr<view> battle_view;
     int enemyCount = 1;
-    int currentFade = 1;
+    int currentPhase = 1;
     int baseEnemies = 1;  // ‰Šú“G”
     State state = State::Idle;
     Judg judg = Judg::None;

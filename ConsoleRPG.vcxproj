@@ -142,6 +142,7 @@
     <ClInclude Include="scr\Character.h" />
     <ClInclude Include="scr\CharacterData.h" />
     <ClInclude Include="scr\CharacterFactory.h" />
+    <ClInclude Include="scr\controller.h" />
     <ClInclude Include="scr\Enemy.h" />
     <ClInclude Include="scr\ObjectPool.h" />
     <ClInclude Include="scr\Player.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="scr\ScreenBase.h" />
     <ClInclude Include="scr\ScreenManager.h" />
     <ClInclude Include="scr\Title.h" />
+    <ClInclude Include="scr\view.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

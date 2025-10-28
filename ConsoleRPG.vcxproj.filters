@@ -25,6 +25,12 @@
     <Filter Include="ソース ファイル\character">
       <UniqueIdentifier>{1f573536-efd8-4716-8258-49ce05b54d49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\controller">
+      <UniqueIdentifier>{6d78aa9c-3b66-4a4c-9a10-af14ce8ee0fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\view">
+      <UniqueIdentifier>{9f67c046-7943-4e2c-bb63-48211e455c5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\Main.cpp">
@@ -91,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="scr\PoolHandle.h">
       <Filter>ヘッダー ファイル\character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\controller.h">
+      <Filter>ヘッダー ファイル\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\view.h">
+      <Filter>ヘッダー ファイル\view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

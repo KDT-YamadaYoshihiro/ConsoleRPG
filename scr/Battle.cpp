@@ -7,9 +7,10 @@
 
 BattleScreen::BattleScreen()
 {
+    battle_view = std::make_shared<view>();
     state = State::Idle;
     baseEnemies = 2;
-    currentFade = 1;
+    currentPhase = 1;
     DeadEnemies = 0;
     BattleStart();
 }
@@ -25,7 +26,7 @@ void BattleScreen::BattleStart() {
 
     player = ScreenManager::GetInstance().GetPlayers();
     if (player.empty()) {
-        std::cerr << "[Error] プレイヤーが存在しません!\n";
+        battle_view->ErrPlayer();
         state = State::Result;
         return;
     }
@@ -34,7 +35,7 @@ void BattleScreen::BattleStart() {
     for (auto& p : player) p->Heal();
 
     // エネミー生成
-    enemyCount = baseEnemies + (currentFade - 1);
+    enemyCount = baseEnemies + (currentPhase - 1);
     ScreenManager::GetInstance().SpawnSlimes(enemyCount);
     for (auto& e : ScreenManager::GetInstance().GetActiveEnemies()) {
         const CharacterData* pData = CharacterFactory::GetInstance().GetCharacterData(SLIME);
@@ -42,8 +43,8 @@ void BattleScreen::BattleStart() {
             e->SetData(*pData);
         }
     }
-
-    std::cout << "\n=== フェーズ " << currentFade << " 開始 ===\n";
+    
+    battle_view->ShowPhase(currentPhase);
     state = State::Idle;
 }
 
@@ -53,31 +54,31 @@ void BattleScreen::Update() {
 
     case State::Idle:
 
-        std::cout << "\n=== Battle Screen ===\n";
+        battle_view->ShowScreen();
 
-        std::cout << "---【ステータス】---" << std::endl;
+        battle_view->StateMsg();
 
         for (auto& p : ScreenManager::GetInstance().GetPlayers()) {
-            std::cout << "プレイヤー\n" << "name:" << p->GetName() << "\nLv:" << p->GetLv() << " HP:" << p->GetHP() << std::endl;
+            battle_view->PlayerState(p->GetName(), p->GetLv(), p->GetHP(), p->GetAttack(), p->GetDefense());
         }
         for (auto& e : ScreenManager::GetInstance().GetActiveEnemies()) {
-            std::cout << "エネミー\n" << "name:" << e->GetName() << "\nLv:" << e->GetLv() << " HP:" << e->GetHP() << std::endl;
+            battle_view->EnemyState(e->GetName(), e->GetLv(), e->GetHP(), e->GetAttack(), e->GetDefense());
         }
 
-        std::cout << "\n---【バトル開始】---" << std::endl;
+        battle_view->StartBattle();
 
         state = State::PlayerTurn;
 
         break;
     
     case State::PlayerTurn:
-        std::cout << "\n--- プレイヤーのターン ---\n";
+        battle_view->PlayerTurnMsg();
         PlayerTurn();
         state = State::EnemyTurn;
         break;
 
     case State::EnemyTurn:
-        std::cout << "\n--- エネミーのターン ---\n";
+        battle_view->EnemyTurnMsg();
         EnemyTurn();
         state = State::CheckResult;
         break;
@@ -103,11 +104,13 @@ void BattleScreen::Update() {
 // プレイヤー行動
 void BattleScreen::PlayerTurn() {
     int action = 0;
-    std::cout << "行動を選択：1=攻撃 2=回復 >> ";
+    battle_view->ChoiceAnnounce();
     std::cin >> action;
 
+    battle_view->ChoiceMsg(action);
+
     if (action == 1) {
-        std::cout << "\n攻撃が選択されました。\n";
+
         auto& enemies = ScreenManager::GetInstance().GetActiveEnemies();
 
         for (auto& p : player) {
@@ -121,31 +124,27 @@ void BattleScreen::PlayerTurn() {
             int dmg = std::max(1, p->GetAttack() - enemy->GetDefense());
             enemy->TakeDamage(dmg);
 
-            std::cout << p->GetName() << " は " << enemy->GetName()
-                << " に " << dmg << " のダメージ！\n";
-
-            std::cout << enemy->GetName() << "の残りHPは" << enemy->GetHP() << std::endl;;
-
+            battle_view->ShowDamage(p->GetName(), enemy->GetName(), dmg);
+            battle_view->ShowHp(enemy->GetName(), enemy->GetHP());
             if (!enemy->IsAlive()) {
-                std::cout << enemy->GetName() << " を倒した！\n";
+                battle_view->DestroySmg(enemy->GetName());
                 p->LvUp();
             }
         }
     }
     else if (action == 2) {
-        std::cout << "\n回復が選択されました。\n";
         for (auto& p : player) {
             if (p->IsAlive()) {
                 p->Heal();
-                std::cout << p->GetName() << " は回復した！ HP:"
-                    << p->GetHP() << "/" << p->GetMaxHP() << "\n";
 
-                std::cout << p->GetName() << "の残りHPは" << p->GetHP() << std::endl;
+                battle_view->ShowHeal(p->GetName(), p->GetHP(), p->GetMaxHP());
+
+                battle_view->ShowHp(p->GetName(), p->GetHP());
             }
         }
     }
     else {
-        std::cout << "無効な入力です。\n";
+        battle_view->ErrSmg();
         std::cin >> action;
     }
 }
@@ -162,13 +161,11 @@ void BattleScreen::EnemyTurn() {
             int dmg = std::max(1, e->GetAttack() - p->GetDefense());
             p->TakeDamage(dmg);
 
-            std::cout << e->GetName() << " は " << p->GetName()
-                << " に " << dmg << " のダメージ！\n";
-
-            std::cout << p->GetName() << "の残りHPは" << p->GetHP() << std::endl;
+            battle_view->ShowDamage(e->GetName(), p->GetName(), dmg);
+            battle_view->ShowHp(p->GetName(), p->GetHP());
 
             if (!p->IsAlive()) {
-                std::cout << p->GetName() << " は倒れた！\n";
+                battle_view->DestroySmg(p->GetName());
             }
             break; // 1ターン1回攻撃
         }
@@ -189,13 +186,13 @@ bool BattleScreen::Victoryjudg() {
 
     if (allEnemiesDead) {
         judg = Judg::Victory;
-        std::cout << "\n敵は全滅した！勝利！\n";
+        battle_view->WinSmg();
         ScreenManager::GetInstance().EndBattle();
         return true;
     }
     if (allPlayersDead) {
         judg = Judg::Defeat;
-        std::cout << "\n全滅した...敗北。\n";
+        battle_view->OverSmg();
         return true;
     }
     return false;
@@ -205,24 +202,24 @@ bool BattleScreen::Victoryjudg() {
 void BattleScreen::FadeTransition() {
 
     if (judg == Judg::Victory) {
-        std::cout << "\n次のフェーズに進みますか？(1:はい 2:いいえ) >> ";
         int choice;
+        battle_view->QuestionPhase();
         std::cin >> choice;
 
         if (choice == 1) {
-            system("cls");
-            currentFade++;
+            battle_view->viewClr();
+            currentPhase++;
             BattleStart();
         }
         else {
-            system("cls");
-            ScreenManager::GetInstance().SetFadeNum(currentFade);
+            battle_view->viewClr();
+            ScreenManager::GetInstance().SetFadeNum(currentPhase);
             ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
         }
     }
     else if (judg == Judg::Defeat) {
-        system("cls");
-        ScreenManager::GetInstance().SetFadeNum(currentFade);
+        battle_view->viewClr();
+        ScreenManager::GetInstance().SetFadeNum(currentPhase);
         ScreenManager::GetInstance().ChangeScreen<ResultScreen>();
     }
 }
