@@ -1,5 +1,6 @@
 #include "CharacterFactory.h"
 
+// キャラクターデータテーブルの定義
 const CharacterData CharacterFactory::CharacterTable[] = {
 	// プレイヤー
 	{"Akira", AKIRA, 1, 100, 100, 20, 10, 15},
