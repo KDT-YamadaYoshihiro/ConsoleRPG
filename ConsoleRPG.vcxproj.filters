@@ -28,6 +28,9 @@
     <Filter Include="ヘッダー ファイル\view">
       <UniqueIdentifier>{9f67c046-7943-4e2c-bb63-48211e455c5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\view">
+      <UniqueIdentifier>{4092a1a2-297c-4a28-a317-0837db45613c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\Main.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="scr\Result.cpp">
       <Filter>ソース ファイル\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\view.cpp">
+      <Filter>ソース ファイル\view</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

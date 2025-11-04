@@ -4,6 +4,7 @@
 class Calculation {
 
 public:
+	
 	// ダメージ計算
 	static int DamageCalc(int attackerAtk, int defenderDef) {
 		int damage = attackerAtk - defenderDef;
@@ -12,4 +13,6 @@ public:
 		}
 		return damage;
 	}
+
+
 };

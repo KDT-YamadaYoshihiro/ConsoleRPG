@@ -11,7 +11,6 @@
 #include "CharacterFactory.h"
 #include "ObjectPool.h"
 
-#define MAX_POOL 20
 
 class ScreenManager {
 

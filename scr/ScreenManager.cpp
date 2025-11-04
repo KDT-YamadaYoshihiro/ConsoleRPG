@@ -1,5 +1,6 @@
 #include "ScreenManager.h"
 #include "Title.h"
+#include "Define.h"
 #include "CharacterFactory.h"
 
 ScreenManager::ScreenManager()

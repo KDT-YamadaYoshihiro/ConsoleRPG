@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_POOL 20			// オブジェクトプール最大数
+
 #define START_ENEMY 1		// 初期敵数
 #define START_DEADENEMY 0	// 初期死亡敵数
 #define START_PHASE 1		// 初期フェーズ数

@@ -135,6 +135,7 @@
     <ClCompile Include="scr\Result.cpp" />
     <ClCompile Include="scr\ScreenManager.cpp" />
     <ClCompile Include="scr\Title.cpp" />
+    <ClCompile Include="scr\view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Battle.h" />

@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 
-
 template<typename T>
 class ObjectPool;
 
@@ -10,8 +9,10 @@ class PoolHandle {
     std::shared_ptr<T> obj_;        // 共有ポインタで扱う
     ObjectPool<T>* pool_ = nullptr; // 所属プール
 
+	// ObjectPool クラスにアクセスを許可
     friend class ObjectPool<T>;
 
+	// プライベートコンストラクタ
     explicit PoolHandle(std::shared_ptr<T> obj, ObjectPool<T>* pool)
         : obj_(obj), pool_(pool) {
     }
