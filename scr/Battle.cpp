@@ -49,6 +49,7 @@ void BattleScreen::BattleStart() {
     state = State::Idle;
 }
 
+
 // ステート更新
 void BattleScreen::Update() {
 

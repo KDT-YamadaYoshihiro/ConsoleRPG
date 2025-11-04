@@ -2,8 +2,6 @@
 #include "ScreenBase.h"
 #include "Character.h"
 #include "CharacterFactory.h"
-#include "Define.h"
-#include "view.h"
 
 class ScreenManager; // ‘O•ûéŒ¾
 

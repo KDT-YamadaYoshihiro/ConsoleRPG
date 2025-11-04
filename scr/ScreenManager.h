@@ -4,7 +4,6 @@
 #include <memory>
 #include "ScreenBase.h"
 #include "Battle.h"
-#include "view.h"
 
 #include "Character.h"
 #include "Enemy.h"

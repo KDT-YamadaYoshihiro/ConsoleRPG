@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 #include "view.h"
+#include "Enum.h"
+#include "Define.h"
 
 // スクリーンの基底クラス
 class ScreenBase {

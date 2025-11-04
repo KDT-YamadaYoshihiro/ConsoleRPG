@@ -9,27 +9,9 @@
 #include "Define.h"
 #include "Calculation.h"
 
+
 class BattleScreen : public ScreenBase {
 public:
-
-    // バトル進行ステート
-    enum class State {
-        Idle,           // バトル開始前、案内表示用
-        PlayerTurn,     // プレイヤー行動フェーズ
-        PTrurnEnd,      // プレイヤー終了フェーズ
-        EnemyTurn,      // エネミー行動フェーズ
-        ETurnEnd,       // エネミーの終了フェーズ
-        CheckResult,    // 勝敗判定フェーズ
-        FadeTransition, // フェード進行確認フェーズ
-        Result          // バトル終了・リザルトへ
-    };
-
-	// 勝敗判定
-    enum class Judg {
-        None,
-        Victory,
-        Defeat,
-    };
 
 private:
     std::vector<std::shared_ptr<Character>> player;
@@ -43,15 +25,20 @@ private:
 	std::shared_ptr<Calculation> calc;
 
 public:
+	// コンストラクタ
     BattleScreen();
-
-
+    // 初期化
     void BattleStart();
+	// 更新処理
     void Update() override;
 
 private:
+	// プレイヤー行動
     void PlayerTurn();
+	// エネミー行動
     void EnemyTurn();
+	// フェード切り替え
     void FadeTransition();
+	// 勝敗判定
     bool Victoryjudg();
 };
