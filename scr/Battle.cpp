@@ -1,10 +1,10 @@
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "Battle.h"
 #include "ScreenManager.h"
 #include "Result.h"
 #include "Enum.h"
-#include <iostream>
-#include <algorithm>
-#include <cstdlib>
 
 // コンストラクタ
 // 初期化
@@ -49,7 +49,6 @@ void BattleScreen::BattleStart() {
     state = State::Idle;
 }
 
-
 // ステート更新
 void BattleScreen::Update() {
 
@@ -60,10 +59,8 @@ void BattleScreen::Update() {
 
 		// スクリーン表示
         battle_view->ShowScreen();
-
 		//　ステータス表示
         battle_view->StateMsg();
-
 		// プレイヤーステータス
         for (auto& p : ScreenManager::GetInstance().GetPlayers()) {
             battle_view->PlayerState(p->GetName(), p->GetLv(), p->GetHP(), p->GetAttack(), p->GetDefense());
@@ -72,7 +69,6 @@ void BattleScreen::Update() {
         for (auto& e : ScreenManager::GetInstance().GetActiveEnemies()) {
             battle_view->EnemyState(e->GetName(), e->GetLv(), e->GetHP(), e->GetAttack(), e->GetDefense());
         }
-
 		// バトル開始メッセ
         battle_view->StartBattle();
         // プレイヤーターンへ
@@ -92,6 +88,7 @@ void BattleScreen::Update() {
         break;
 
 	case State::EnemyTurn:		  // エネミー行動フェーズ 
+
 		// メッセージの表示
         battle_view->EnemyTurnMsg();
 		// エネミーの行動
@@ -115,88 +112,67 @@ void BattleScreen::Update() {
         break;
 
 	case State::FadeTransition:	  // フェード進行確認フェーズ
+
 		// フェード進行
         FadeTransition();
-        break;
-
-    default:
         break;
     }
 }
 
 // プレイヤー行動
 void BattleScreen::PlayerTurn() {
+	// プレイヤーの選択肢取得
+    int action = GetPlayerAction();  // プレイヤーの選択を取得
 
-	// 行動選択
-    int action = 0;
-	// アクション選択案内
-    battle_view->ChoiceAnnounce();
-	// 入力受付
-    std::cin >> action;
-
-	// 選択結果表示
-    battle_view->ChoiceMsg(action);
-
-	// 行動処理
-    if (action == ACTION::ATTACK) {
-
-		// 生成されている敵を取得
-        auto& enemies = ScreenManager::GetInstance().GetActiveEnemies();
-
-        for (auto& p : player) {
-            // 生きてる敵を探す
-            auto it = std::find_if(enemies.begin(), enemies.end(),
-                [](auto& e) { return e->IsAlive(); });
-
-			// 敵がいなければ終了
-            if (it == enemies.end())
-            {
-                break;
-            }
-
-			// 攻撃処理
-			auto e = *it;
-            // ダメージ計算
-            int dmg = calc->DamageCalc(p->GetAttack(), e->GetDefense());
-            // エネミーにダメージを与える
-            e->TakeDamage(dmg);
-
-            // ダメージ表示
-            battle_view->ShowDamage(p->GetName(), e->GetName(), dmg);
-            // エネミーのHP表示
-            battle_view->ShowHp(e->GetName(), e->GetHP());
-
-            // 敵が倒れた場合の処理
-            if (!e->IsAlive()) {
-                battle_view->DestroySmg(e->GetName());
-                p->LvUp();
-            }
-            
-        }
-    }
-    else if (action == ACTION::HEAL) {
-
-		// 回復処理
-        for (auto& p : player) {
-			// 生きている場合回復
-            if (p->IsAlive()) {
-				// 回復
-                p->Heal();
-
-				// 回復表示
-                battle_view->ShowHeal(p->GetName(), p->GetHP(), p->GetMaxHP());
-				// HP表示
-                battle_view->ShowHp(p->GetName(), p->GetHP());
-            }
-        }
-    }
-    else {
-		// エラーの入力値
-        battle_view->ErrSmg();
-        std::cin >> action;
+    // 行動処理
+    switch (action) {
+        case ACTION::ATTACK:
+            PlayerAttack();
+            break;
+        case ACTION::HEAL:
+            PlayerHeal();
+            break;
+        default:
+            battle_view->ErrSmg();
+            break;
     }
 }
+// プレイヤーの選択肢取得
+int BattleScreen::GetPlayerAction() {
+    int action = 0;
+    battle_view->ChoiceAnnounce();
+    std::cin >> action;
+    return action;
+}
+// プレイヤー攻撃
+void BattleScreen::PlayerAttack() {
+    auto& enemies = ScreenManager::GetInstance().GetActiveEnemies();
+    for (auto& p : player) {
+        auto it = std::find_if(enemies.begin(), enemies.end(), [](auto& e) { return e->IsAlive(); });
+        if (it == enemies.end()) break;
+        
+        auto e = *it;
+        int dmg = calc->DamageCalc(p->GetAttack(), e->GetDefense());
+        e->TakeDamage(dmg);
+        battle_view->ShowDamage(p->GetName(), e->GetName(), dmg);
+        battle_view->ShowHp(e->GetName(), e->GetHP());
 
+        if (!e->IsAlive()) {
+            battle_view->DestroySmg(e->GetName());
+            p->LvUp();
+        }
+    }
+}
+// プレイヤー回復
+void BattleScreen::PlayerHeal() {
+    for (auto& p : player) {
+        if (p->IsAlive()) {
+            p->Heal();
+            battle_view->ShowHeal(p->GetName(), p->GetHP(), p->GetMaxHP());
+            battle_view->ShowHp(p->GetName(), p->GetHP());
+        }
+    }
+}
 // エネミー行動
 void BattleScreen::EnemyTurn() {
 	// 生成されている敵を取得
@@ -237,7 +213,6 @@ void BattleScreen::EnemyTurn() {
         }
     }
 }
-
 // 勝敗判定
 bool BattleScreen::Victoryjudg() {
 
@@ -272,7 +247,6 @@ bool BattleScreen::Victoryjudg() {
     }
     return false;
 }
-
 // フェード切り替え
 void BattleScreen::FadeTransition() {
 

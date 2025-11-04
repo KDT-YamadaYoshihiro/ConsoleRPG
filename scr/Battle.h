@@ -5,13 +5,10 @@
 #include "CharacterFactory.h"
 #include "Character.h"
 #include "ObjectPool.h"
-#include "view.h"
-#include "Define.h"
 #include "Calculation.h"
 
 
 class BattleScreen : public ScreenBase {
-public:
 
 private:
     std::vector<std::shared_ptr<Character>> player;
@@ -35,6 +32,13 @@ public:
 private:
 	// プレイヤー行動
     void PlayerTurn();
+	// プレイヤーの選択肢取得
+	int GetPlayerAction();
+	// プレイヤー攻撃
+	void PlayerAttack();
+	// プレイヤー回復
+	void PlayerHeal();
+
 	// エネミー行動
     void EnemyTurn();
 	// フェード切り替え

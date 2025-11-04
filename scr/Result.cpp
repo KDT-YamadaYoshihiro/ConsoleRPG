@@ -1,6 +1,6 @@
+#include <iostream>
 #include "Result.h"
 #include "ScreenManager.h"
-#include <iostream>
 
 // コンストラクタ
 // 初期化
