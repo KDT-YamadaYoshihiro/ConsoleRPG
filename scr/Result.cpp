@@ -2,60 +2,68 @@
 #include "ScreenManager.h"
 #include <iostream>
 
+// コンストラクタ
+// 初期化
 ResultScreen::ResultScreen()
 {
+	// ビュークラスの生成
+	screen_view = std::make_shared<view>();
 }
 
-void ResultScreen::SetPlayer(std::vector<std::shared_ptr<Character>> p) {
-    player = p;
-}
-
+// 最終フェード数セット関数
 void ResultScreen::SetLastFade(int fade) {
     lastFade = fade;
 }
 
+// 更新処理
 void ResultScreen::Update() {
 
+	// 最終フェード数を取得
     SetLastFade(ScreenManager::GetInstance().GetFadeNum());
 
+	// リザルト表示
+    // 
     if (!displayed) {
+		// プレイヤー情報取得
         player = ScreenManager::GetInstance().GetPlayers();
 
+		// プレイヤー情報表示
         for (auto& p : player) {
+			// プレイヤーが見つからない場合エラー
             if (!p) {
-                std::cerr << "[Error] リザルトスクリーンにてプレイヤーが見つかりませんでした\n";
+				// エラー表示
+				screen_view->ErrPlayer();
                 return;
             }
 
-            std::cout << "\n=== Result Screen ===\n";
-            std::cout << "Last Fade: " << lastFade << "\n";
-            std::cout << "Player: " << p->GetName() << "\n";
-            std::cout << "LV: " << p->GetData().Lv
-                << " HP: " << p->GetHP() << "/" << p->GetMaxHP()
-                << " ATK: " << p->GetAttack()
-                << " DEF: " << p->GetDefense() << "\n";
+			// リザルト画面表示
+			screen_view->ResultScreen(lastFade, p);
 
-            std::cout << "\n1: Retry  2: Exit\n";
+			// 表示済みフラグを立てる
             displayed = true;
         }
     }
 
     int choice = 0;
+	// 再挑戦 or 終了の案内
     std::cin >> choice;
 
-    if (choice == 1) {
+    if (choice == RETURY) {
         // 再挑戦の場合、プレイヤーのステータスを初期化
         if (ScreenManager::GetInstance) {
             ScreenManager::GetInstance().ResetPlayerStatus();
         }
-        std::cout << "Restarting battle...\n";
+
+		// 再挑戦メッセ
+		screen_view->RetryMsg();
         // 画面を遷移
-        system("cls");
+		screen_view->viewClr();
         ScreenManager::GetInstance().ChangeScreen<BattleScreen>();
     }
-    else if (choice == 2) {
-        system("cls");
-        std::cout << "Exiting game...\n";
+    else if (choice == EXIT) {
+		screen_view->viewClr();
+		// 終了メッセ
+		screen_view->ExitMsg();
         return;
     }
 }

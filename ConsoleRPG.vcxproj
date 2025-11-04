@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="scr\Battle.cpp" />
-    <ClCompile Include="scr\Character.cpp" />
     <ClCompile Include="scr\CharacterFactory.cpp" />
     <ClCompile Include="scr\Enemy.cpp" />
     <ClCompile Include="scr\Main.cpp" />
@@ -139,10 +138,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Battle.h" />
+    <ClInclude Include="scr\Calculation.h" />
     <ClInclude Include="scr\Character.h" />
     <ClInclude Include="scr\CharacterData.h" />
     <ClInclude Include="scr\CharacterFactory.h" />
+    <ClInclude Include="scr\Define.h" />
     <ClInclude Include="scr\Enemy.h" />
+    <ClInclude Include="scr\Enum.h" />
     <ClInclude Include="scr\ObjectPool.h" />
     <ClInclude Include="scr\Player.h" />
     <ClInclude Include="scr\PoolHandle.h" />

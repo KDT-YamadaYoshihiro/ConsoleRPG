@@ -3,8 +3,10 @@
 #include "CharacterFactory.h"
 
 ScreenManager::ScreenManager()
-    :slimePool(20)
+    :slimePool(MAX_POOL)
 {
+	// ビュークラスの生成
+	manager_view = std::make_shared<view>();
 	// 最初のスクリーンはタイトル
 	if (currentScreen == nullptr) {
 		currentScreen = std::make_shared<TitleScreen>();
@@ -12,13 +14,16 @@ ScreenManager::ScreenManager()
     InitPlayers();
 }
 
+// 更新処理
 void ScreenManager::Update()
 {
+	// 現在のスクリーンの更新処理を呼び出す
     if (currentScreen != nullptr) {
         currentScreen->Update();
     }
     else {
-        std::cout << "currentScreen is nullptr" << std::endl;
+        // エラー表示
+        manager_view->ErrManager();
     }
 }
 

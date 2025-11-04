@@ -1,10 +1,23 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <memory>
+#include "Character.h"
 
 class view {
 
 public:
+
+	// マネージャー用エラーメッセージ
+	void ErrManager() {
+		std::cerr << "[Error] スクリーンが存在しません!\n";
+	}
+
+	// タイトル画面表示
+	void TitleScreen() {
+		std::cout << "\n=== Title Screen ===\n";
+		std::cout << "Press Enter to Start" << std::endl;
+	}
 
 	// プレイヤー読み込みエラー
 	void ErrPlayer() {
@@ -126,6 +139,32 @@ public:
 	// 画面一掃
 	void viewClr() {
 		system("cls");
+	}
+
+	// リザルト画面表示
+	void ResultScreen(int arg_fade, std::shared_ptr<Character> arg_character) {
+		std::cout << "\n=== Result Screen ===\n";
+		// リザルト表示
+		std::cout << "Last Fade: " << arg_fade << "\n";
+		std::cout << "Player: " << arg_character->GetName() << "\n";
+		std::cout << "LV: " << arg_character->GetLv()
+			<< " HP: " << arg_character->GetHP() << "/" << arg_character->GetMaxHP()
+			<< " ATK: " << arg_character->GetAttack()
+			<< " DEF: " << arg_character->GetDefense() << "\n";
+
+		std::cout << "1: Retry\n2: Exit\n";
+	}
+
+	// 再挑戦メッセ
+	void RetryMsg()
+	{
+		std::cout << "Restarting battle...\n";
+	}
+
+	// 終了メッセ
+	void ExitMsg()
+	{
+		std::cout << "Exiting game...\n";
 	}
 
 };

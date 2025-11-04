@@ -2,18 +2,21 @@
 #include "Battle.h"
 #include "ScreenManager.h"
 
+TitleScreen::TitleScreen()
+{
+	// ビュークラスの生成
+	screen_view = std::make_shared<view>();
+}
+
+// 更新処理
 void TitleScreen::Update()
 {
-	// エンターキーの入力を待つ
-	std::cout << "\n=== Title Screen ===\n";
-
-	std::cout << "Press Enter to Start" << std::endl;
-
+	screen_view->TitleScreen();
 
 	// スペースキーの入力後、スクリーンをステージへ遷移
 	if (std::cin.get() == '\n') {
 		ScreenManager::GetInstance().ChangeScreen<BattleScreen>();
 		// スクリーンをクリアにする
-		system("cls");
+		screen_view->viewClr();
 	}
 }

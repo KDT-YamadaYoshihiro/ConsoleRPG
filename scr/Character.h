@@ -1,14 +1,6 @@
 #pragma once
 #include "CharacterData.h"
-
-// 行動選択の列挙型
-enum class ACTION {
-	SELECT,
-	ATTACK,
-	HEAL,
-	END,
-	NONE
-};
+#include "Enum.h"
 
 // キャラクターの基底クラス
 class Character {
@@ -73,6 +65,7 @@ public:
 		data.HP = data.maxHP;
 	}
 
+	// 生存判定
 	bool IsAlive() const {
 		// HPが0以下なら死亡
 		if (data.HP <= 0) {
@@ -83,6 +76,7 @@ public:
 		}
 	}
 
+	// レベルアップ
 	void LvUp() {
 		data.Lv++;
 		data.maxHP *= 1.05;

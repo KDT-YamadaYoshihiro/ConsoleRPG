@@ -4,17 +4,24 @@
 #include <memory>
 #include "ScreenBase.h"
 #include "Battle.h"
+#include "view.h"
 
 #include "Character.h"
 #include "Enemy.h"
 #include "CharacterFactory.h"
 #include "ObjectPool.h"
 
+#define MAX_POOL 20
+
 class ScreenManager {
 
 	// ステージ番号
 	int stageNumber = 0;
 
+	// ビュークラス
+	std::shared_ptr<view> manager_view;
+
+	// プレイヤーキャラクター
 	std::vector<std::shared_ptr<Character>> players;
 	// スライム用プール
 	ObjectPool<Enemy> slimePool;
@@ -60,6 +67,7 @@ public:
 		return players;
 	}
 
+	// プレイヤーステータスリセット
 	void ResetPlayerStatus() {
 		for (auto& player : players) {
 			if (player) {
@@ -72,6 +80,7 @@ public:
 		}
 	}
 
+	// スライム生成
 	void SpawnSlimes(int count) {
 		activeEnemies.clear();
 
@@ -90,10 +99,12 @@ public:
 		}
 	}
 
+	// アクティブなエネミー取得
 	const std::vector<std::shared_ptr<Enemy>>& GetActiveEnemies() const {
 		return activeEnemies;
 	}
 
+	// アクティブなエネミー取得（非const版）
 	void EndBattle() {
 		// バトル終了時、全エネミーをプールに返却
 		for (auto& e : activeEnemies) {

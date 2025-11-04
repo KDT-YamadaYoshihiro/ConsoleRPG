@@ -6,10 +6,12 @@
 #include "Character.h"
 #include "ObjectPool.h"
 #include "view.h"
-
+#include "Define.h"
+#include "Calculation.h"
 
 class BattleScreen : public ScreenBase {
 public:
+
     // バトル進行ステート
     enum class State {
         Idle,           // バトル開始前、案内表示用
@@ -22,8 +24,8 @@ public:
         Result          // バトル終了・リザルトへ
     };
 
-    enum class Judg
-    {
+	// 勝敗判定
+    enum class Judg {
         None,
         Victory,
         Defeat,
@@ -32,17 +34,17 @@ public:
 private:
     std::vector<std::shared_ptr<Character>> player;
     std::shared_ptr<view> battle_view;
-    int enemyCount = 1;
-    int currentPhase = 1;
-    int baseEnemies = 1;  // 初期敵数
+    int enemyCount = -1;
+    int currentPhase = -1;
+    int baseEnemies = -1;  // 初期敵数
     State state = State::Idle;
     Judg judg = Judg::None;
     int DeadEnemies;
+	std::shared_ptr<Calculation> calc;
 
 public:
     BattleScreen();
 
-    void SetPlayer(std::vector<std::shared_ptr<Character>> p);
 
     void BattleStart();
     void Update() override;

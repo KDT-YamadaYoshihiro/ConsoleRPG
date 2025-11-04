@@ -36,9 +36,6 @@
     <ClCompile Include="scr\ScreenManager.cpp">
       <Filter>ソース ファイル\screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Character.cpp">
-      <Filter>ソース ファイル\character</Filter>
-    </ClCompile>
     <ClCompile Include="scr\CharacterFactory.cpp">
       <Filter>ソース ファイル\character</Filter>
     </ClCompile>
@@ -97,6 +94,15 @@
     </ClInclude>
     <ClInclude Include="scr\view.h">
       <Filter>ヘッダー ファイル\view</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Enum.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Calculation.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Define.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
