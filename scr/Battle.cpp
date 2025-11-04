@@ -1,10 +1,6 @@
-#include <iostream>
-#include <algorithm>
-#include <cstdlib>
 #include "Battle.h"
 #include "ScreenManager.h"
 #include "Result.h"
-#include "Enum.h"
 
 // コンストラクタ
 // 初期化

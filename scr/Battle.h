@@ -1,6 +1,6 @@
 #pragma once
-#include <vector>
-#include <memory>
+#include <algorithm>
+#include <cstdlib>
 #include "ScreenBase.h"
 #include "CharacterFactory.h"
 #include "Character.h"

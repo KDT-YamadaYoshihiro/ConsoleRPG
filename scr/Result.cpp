@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Result.h"
 #include "ScreenManager.h"
 
