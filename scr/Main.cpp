@@ -1,12 +1,15 @@
 #include <iostream>
 #include "ScreenManager.h"
 
+#include"GameManager.hpp"
+
+
 int main() {
+	GameManager& game = GameManager::Instace();
+	int result = 0;
 
-	while (true) {
-		ScreenManager::GetInstance().Update();
-	}
+	game.Run();
+	result = game.Shutdown();
 
-	return 0;
-
+	return result;
 }

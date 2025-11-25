@@ -6,7 +6,19 @@
 
 class view {
 
+private:
+	view() = default;
+	virtual ~view() = default;
+
 public:
+	view(const view&) = delete;
+	view& operator=(const view&) = delete;
+
+	static view& Instance()
+	{
+		static view instance;
+		return instance;
+	}
 
 	// マネージャー用エラーメッセージ
 	void ErrManager();
@@ -22,6 +34,11 @@ public:
 	void PlayerState(std::string arg_name, int arg_lv, int arg_hp, int arg_atk, int arg_def);
 	// エネミーのステータスを表示
 	void EnemyState(std::string arg_name, int arg_lv, int arg_hp, int arg_atk, int arg_def);
+
+
+	void DispCharaStatus(ObjectType type, const CharacterData& data);
+	
+
 	// バトル開始
 	void StartBattle();
 	// フェーズの表示

@@ -1,12 +1,11 @@
 #include "Result.h"
 #include "ScreenManager.h"
+#include "GameManager.hpp"
 
 // コンストラクタ
 // 初期化
 ResultScreen::ResultScreen()
 {
-	// ビュークラスの生成
-	screen_view = std::make_shared<view>();
 }
 
 // 最終フェード数セット関数
@@ -31,12 +30,12 @@ void ResultScreen::Update() {
 			// プレイヤーが見つからない場合エラー
             if (!p) {
 				// エラー表示
-				screen_view->ErrPlayer();
+                view::Instance().ErrPlayer();
                 return;
             }
 
 			// リザルト画面表示
-			screen_view->ResultScreen(lastFade, p);
+            view::Instance().ResultScreen(lastFade, p);
 
 			// 表示済みフラグを立てる
             displayed = true;
@@ -47,22 +46,23 @@ void ResultScreen::Update() {
 	// 再挑戦 or 終了の案内
     std::cin >> choice;
 
-    if (choice == RETURY) {
+    if (choice == RETRY) {
         // 再挑戦の場合、プレイヤーのステータスを初期化
         if (ScreenManager::GetInstance) {
             ScreenManager::GetInstance().ResetPlayerStatus();
         }
 
 		// 再挑戦メッセ
-		screen_view->RetryMsg();
+        view::Instance().RetryMsg();
         // 画面を遷移
-		screen_view->viewClr();
+        view::Instance().viewClr();
         ScreenManager::GetInstance().ChangeScreen<BattleScreen>();
     }
     else if (choice == EXIT) {
-		screen_view->viewClr();
+        view::Instance().viewClr();
 		// 終了メッセ
-		screen_view->ExitMsg();
+        view::Instance().ExitMsg();
+        GameManager::Instace().Finalize();
         return;
     }
 }

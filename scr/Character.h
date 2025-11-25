@@ -12,6 +12,7 @@ protected:
 	// 行動選択
 	ACTION action = ACTION::NONE;
 
+	ObjectType m_type = ObjectType::None;
 
 public:
 
@@ -19,8 +20,8 @@ public:
 	Character() = default;
 	// コンストラクタ
 	// 初期化
-	Character(const CharacterData& arg_data)
-		:data(arg_data)
+	Character(const CharacterData& arg_data, ObjectType type)
+		:data(arg_data), m_type(type)
 	{
 
 	};
@@ -35,6 +36,7 @@ public:
 	int GetAttack() const { return data.attack; }
 	int GetDefense() const { return data.defense; }
 	int GetSpeed() const { return data.speed; }
+	ObjectType GetType()const { return m_type; }
 
 	void setID(int id) { data.ID = id; }
 
@@ -78,6 +80,9 @@ public:
 
 	// レベルアップ
 	void LvUp() {
+		/*
+		* マジックナンバー
+		*/
 		data.Lv++;
 		data.maxHP *= 1.05;
 		data.attack *= 1.05;

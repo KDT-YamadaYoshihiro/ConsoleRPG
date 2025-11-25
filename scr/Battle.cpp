@@ -6,8 +6,6 @@
 // 初期化
 BattleScreen::BattleScreen()
 {
-    battle_view = std::make_shared<view>();
-	calc = std::make_shared<Calculation>();
     state = State::Idle;
     baseEnemies = START_ENEMY;
     currentPhase = START_PHASE;
@@ -23,7 +21,7 @@ void BattleScreen::BattleStart() {
     player = ScreenManager::GetInstance().GetPlayers();
 	// プレイヤーがいない場合エラー
     if (player.empty()) {
-        battle_view->ErrPlayer();
+        view::Instance().ErrPlayer();
         state = State::Result;
         return;
     }
@@ -41,7 +39,7 @@ void BattleScreen::BattleStart() {
         }
     }
 	// フェーズ表示
-    battle_view->ShowPhase(currentPhase);
+    view::Instance().ShowPhase(currentPhase);
     state = State::Idle;
 }
 
@@ -54,19 +52,19 @@ void BattleScreen::Update() {
 	case State::Idle:               // バトル開始前、案内表示用
 
 		// スクリーン表示
-        battle_view->ShowScreen();
+        view::Instance().ShowScreen();
 		//　ステータス表示
-        battle_view->StateMsg();
+        view::Instance().StateMsg();
 		// プレイヤーステータス
         for (auto& p : ScreenManager::GetInstance().GetPlayers()) {
-            battle_view->PlayerState(p->GetName(), p->GetLv(), p->GetHP(), p->GetAttack(), p->GetDefense());
+           view::Instance().DispCharaStatus(p->GetType(), p->GetData());
         }
 		// エネミーステータス
         for (auto& e : ScreenManager::GetInstance().GetActiveEnemies()) {
-            battle_view->EnemyState(e->GetName(), e->GetLv(), e->GetHP(), e->GetAttack(), e->GetDefense());
+            view::Instance().DispCharaStatus(e->GetType(), e->GetData());
         }
 		// バトル開始メッセ
-        battle_view->StartBattle();
+        view::Instance().StartBattle();
         // プレイヤーターンへ
         state = State::PlayerTurn;
 
@@ -75,7 +73,7 @@ void BattleScreen::Update() {
 	case State::PlayerTurn:         // プレイヤー行動フェーズ
 
         // メッセージの表示
-        battle_view->PlayerTurnMsg();
+        view::Instance().PlayerTurnMsg();
         // プレイヤーの行動
         PlayerTurn();
 		// エネミーターンへ
@@ -86,7 +84,7 @@ void BattleScreen::Update() {
 	case State::EnemyTurn:		  // エネミー行動フェーズ 
 
 		// メッセージの表示
-        battle_view->EnemyTurnMsg();
+        view::Instance().EnemyTurnMsg();
 		// エネミーの行動
         EnemyTurn();
 		// 勝敗判定へ
@@ -129,14 +127,14 @@ void BattleScreen::PlayerTurn() {
             PlayerHeal();
             break;
         default:
-            battle_view->ErrSmg();
+            view::Instance().ErrSmg();
             break;
     }
 }
 // プレイヤーの選択肢取得
 int BattleScreen::GetPlayerAction() {
     int action = 0;
-    battle_view->ChoiceAnnounce();
+    view::Instance().ChoiceAnnounce();
     std::cin >> action;
     return action;
 }
@@ -148,13 +146,13 @@ void BattleScreen::PlayerAttack() {
         if (it == enemies.end()) break;
         
         auto e = *it;
-        int dmg = calc->DamageCalc(p->GetAttack(), e->GetDefense());
+        int dmg = Calculation::DamageCalc(p->GetAttack(), e->GetDefense());
         e->TakeDamage(dmg);
-        battle_view->ShowDamage(p->GetName(), e->GetName(), dmg);
-        battle_view->ShowHp(e->GetName(), e->GetHP());
+        view::Instance().ShowDamage(p->GetName(), e->GetName(), dmg);
+        view::Instance().ShowHp(e->GetName(), e->GetHP());
 
         if (!e->IsAlive()) {
-            battle_view->DestroySmg(e->GetName());
+            view::Instance().DestroySmg(e->GetName());
             p->LvUp();
         }
     }
@@ -164,8 +162,8 @@ void BattleScreen::PlayerHeal() {
     for (auto& p : player) {
         if (p->IsAlive()) {
             p->Heal();
-            battle_view->ShowHeal(p->GetName(), p->GetHP(), p->GetMaxHP());
-            battle_view->ShowHp(p->GetName(), p->GetHP());
+            view::Instance().ShowHeal(p->GetName(), p->GetHP(), p->GetMaxHP());
+            view::Instance().ShowHp(p->GetName(), p->GetHP());
         }
     }
 }
@@ -192,18 +190,19 @@ void BattleScreen::EnemyTurn() {
             }
 
 			//　ダメージ計算
-            int dmg = calc->DamageCalc(e->GetAttack(), p->GetDefense());
+            int dmg = Calculation::DamageCalc(e->GetAttack(), p->GetDefense());
 			// プレイヤーにダメージを与える
             p->TakeDamage(dmg);
 
             // ダメージ表示
-            battle_view->ShowDamage(e->GetName(), p->GetName(), dmg);
+            view::Instance().ShowDamage(e->GetName(), p->GetName(), dmg);
+
 			// プレイヤーのHP表示
-            battle_view->ShowHp(p->GetName(), p->GetHP());
+            view::Instance().ShowHp(p->GetName(), p->GetHP());
 
 			// プレイヤーが倒れた場合の処理
             if (!p->IsAlive()) {
-                battle_view->DestroySmg(p->GetName());
+                view::Instance().DestroySmg(p->GetName());
             }
             break; // 1ターン1回攻撃
         }
@@ -229,7 +228,7 @@ bool BattleScreen::Victoryjudg() {
         // 勝利判定
         judg = Judg::Victory;
         // 勝利メッセ
-        battle_view->WinSmg();
+        view::Instance().WinSmg();
 		// バトル終了処理
         ScreenManager::GetInstance().EndBattle();
         return true;
@@ -238,7 +237,7 @@ bool BattleScreen::Victoryjudg() {
 		// 敗北判定
         judg = Judg::Defeat;
 		// 敗北メッセ
-        battle_view->OverSmg();
+        view::Instance().OverSmg();
         return true;
     }
     return false;
@@ -251,12 +250,12 @@ void BattleScreen::FadeTransition() {
 
         // バトルの続行確認
         int choice;
-        battle_view->QuestionPhase();
+        view::Instance().QuestionPhase();
         std::cin >> choice;
 
         if (choice == NEXT_PHASE) {
 			// 次のフェーズへ
-            battle_view->viewClr();
+            view::Instance().viewClr();
 			// フェーズ進行
             currentPhase++;
 			// バトル再開（初期化）
@@ -264,7 +263,7 @@ void BattleScreen::FadeTransition() {
         }
         else if(choice == TO_RESULT){
             // 画面をクリア
-            battle_view->viewClr();
+            view::Instance().viewClr();
 			// 勝利したフェード数をセット
             ScreenManager::GetInstance().SetFadeNum(currentPhase);
             // リザルト画面へ
@@ -272,14 +271,14 @@ void BattleScreen::FadeTransition() {
         }
         else {
             // エラーの入力値
-			battle_view->ErrSmg();
+            view::Instance().ErrSmg();
 			std::cin >> choice;
         }
     }
     else if (judg == Judg::Defeat) {
 
 		// 画面をクリア
-        battle_view->viewClr();
+        view::Instance().viewClr();
 		// 勝利したフェード数をセット
         ScreenManager::GetInstance().SetFadeNum(currentPhase);
 		// リザルト画面へ

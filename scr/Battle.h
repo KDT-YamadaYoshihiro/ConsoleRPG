@@ -12,14 +12,12 @@ class BattleScreen : public ScreenBase {
 
 private:
     std::vector<std::shared_ptr<Character>> player;
-    std::shared_ptr<view> battle_view;
     int enemyCount = -1;
     int currentPhase = -1;
     int baseEnemies = -1;  // 初期敵数
     State state = State::Idle;
     Judg judg = Judg::None;
     int DeadEnemies;
-	std::shared_ptr<Calculation> calc;
 
 public:
 	// コンストラクタ

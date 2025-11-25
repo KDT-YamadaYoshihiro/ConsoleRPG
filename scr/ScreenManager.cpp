@@ -6,8 +6,6 @@
 ScreenManager::ScreenManager()
     :slimePool(MAX_POOL)
 {
-	// ビュークラスの生成
-	manager_view = std::make_shared<view>();
 	// 最初のスクリーンはタイトル
 	if (currentScreen == nullptr) {
 		currentScreen = std::make_shared<TitleScreen>();
@@ -24,7 +22,7 @@ void ScreenManager::Update()
     }
     else {
         // エラー表示
-        manager_view->ErrManager();
+        view::Instance().ErrManager();
     }
 }
 

@@ -16,9 +16,6 @@ class ScreenManager {
 	// ステージ番号
 	int stageNumber = 0;
 
-	// ビュークラス
-	std::shared_ptr<view> manager_view;
-
 	// プレイヤーキャラクター
 	std::vector<std::shared_ptr<Character>> players;
 	// スライム用プール
@@ -53,7 +50,7 @@ public:
 
 	// プレイヤーを生成してプールに登録
 	void InitPlayers() {
-		auto akira = CharacterFactory::GetInstance().CreateCracter(AKIRA);
+		auto akira = CharacterFactory::GetInstance().CreateCracter(AKIRA,ObjectType::Player);
 		if (!akira) {
 			std::cout << "アキラの生成に失敗しました" << std::endl;
 		}
@@ -90,7 +87,7 @@ public:
 			// スライムのデータ初期化
 			const auto* data = CharacterFactory::GetInstance().GetCharacterData(SLIME);
 			if (data) {
-				*slime = Enemy(*data);
+				*slime = Enemy(*data,ObjectType::Enemy);
 			}
 
 			activeEnemies.push_back(slime);

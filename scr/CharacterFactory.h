@@ -1,13 +1,19 @@
 #pragma once
 #include "CharacterData.h"
 #include "Character.h"
+#include <unordered_map>
+
 
 class CharacterFactory {
 
 	static const CharacterData CharacterTable[];
 
+	std::unordered_map<int, CharacterData> m_charaterTable;
+
+
 	// コンストラクタ
-	CharacterFactory() = default;
+	CharacterFactory();
+	virtual ~CharacterFactory() = default;
 
 public:
 
@@ -26,5 +32,5 @@ public:
 	const CharacterData* GetCharacterData(int id) const;
 
 	// 指定したIDのキャラクターデータを生成して返す
-	std::shared_ptr<Character> CreateCracter(int arg_id);
+	std::shared_ptr<Character> CreateCracter(int arg_id,ObjectType type);
 };

@@ -12,9 +12,6 @@ class ScreenBase {
 
 protected:
 
-	// ビュークラス
-	std::shared_ptr<view> screen_view;
-
 public:
 
 	// コンストラクタ

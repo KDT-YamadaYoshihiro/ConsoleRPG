@@ -6,8 +6,8 @@
 // プレイヤークラス
 class Player : public Character {
 public:
-	Player(const CharacterData& arg_data)
-		:Character(arg_data)
+	Player(const CharacterData& arg_data, ObjectType type)
+		:Character(arg_data,type)
 	{
 	}
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 // 行動選択肢
 enum ACTION {
 	SELECT,
@@ -11,7 +13,7 @@ enum ACTION {
 
 // ゲーム終了選択肢
 enum GAME_END {
-	RETURY = 1,
+	RETRY = 1,
 	EXIT = 2,
 };
 
@@ -38,4 +40,12 @@ enum class Judg {
     None,
     Victory,
     Defeat,
+};
+
+//  オブジェクト
+enum class ObjectType:uint32_t
+{
+    None,
+    Player,
+    Enemy,
 };

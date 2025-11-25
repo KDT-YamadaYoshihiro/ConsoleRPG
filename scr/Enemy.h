@@ -7,8 +7,8 @@ class Enemy : public Character {
 public:
 
 	Enemy() = default;
-	Enemy(const CharacterData& arg_data)
-		:Character(arg_data)
+	Enemy(const CharacterData& arg_data,ObjectType type)
+		:Character(arg_data,type)
 	{
 	}
 

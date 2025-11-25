@@ -130,6 +130,7 @@
     <ClCompile Include="scr\Battle.cpp" />
     <ClCompile Include="scr\CharacterFactory.cpp" />
     <ClCompile Include="scr\Enemy.cpp" />
+    <ClCompile Include="scr\GameManager.cpp" />
     <ClCompile Include="scr\Main.cpp" />
     <ClCompile Include="scr\Player.cpp" />
     <ClCompile Include="scr\Result.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="scr\Define.h" />
     <ClInclude Include="scr\Enemy.h" />
     <ClInclude Include="scr\Enum.h" />
+    <ClInclude Include="scr\GameManager.hpp" />
     <ClInclude Include="scr\ObjectPool.h" />
     <ClInclude Include="scr\Player.h" />
     <ClInclude Include="scr\PoolHandle.h" />
